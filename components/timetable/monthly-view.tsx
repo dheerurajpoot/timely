@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { MonthlyTimetable, TimeSlot } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { SlotEditor } from './slot-editor';
-import { Plus, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Plus, ChevronLeft, ChevronRight, Loader2 } from 'lucide-react';
 import { format, addMonths, subMonths, getDaysInMonth, startOfMonth } from 'date-fns';
 
 interface MonthlyViewProps {
@@ -60,10 +60,7 @@ export function MonthlyView({
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Loading timetable...</p>
-        </div>
+         <Loader2 className="animate-spin rounded-full h-8 w-8"/>
       </div>
     );
   }
@@ -72,7 +69,7 @@ export function MonthlyView({
     <div className="h-full flex flex-col bg-background">
       {/* Header */}
       <div className="border-b border-border p-6 flex items-center justify-between">
-        <h1 className="text-3xl font-bold">{format(monthStart, 'MMMM yyyy')}</h1>
+        <h1 className="text-2xl font-bold">{format(monthStart, 'MMMM yyyy')}</h1>
         <div className="flex gap-2">
           <Button
             variant="outline"

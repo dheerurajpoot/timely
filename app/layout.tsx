@@ -64,7 +64,7 @@ export default function RootLayout({
           <AuthProvider>
             {children}
             <OfflineIndicator />
-            <PWAInstallPrompt />
+            {/* <PWAInstallPrompt /> */}
           </AuthProvider>
         </ThemeProvider>
         {process.env.NODE_ENV === 'production' && <Analytics />}

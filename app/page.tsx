@@ -13,11 +13,6 @@ export default function HomePage() {
   const router = useRouter();
   const [isScrolled, setIsScrolled] = useState(false);
 
-  // useEffect(() => {
-  //   if (!loading && user) {
-  //     router.push('/dashboard');
-  //   }
-  // }, [user, loading, router]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -27,19 +22,6 @@ export default function HomePage() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // if (loading) {
-  //   return (
-  //     <div className="min-h-screen flex items-center justify-center bg-background">
-  //       <div className="text-center w-full max-w-sm mx-auto">
-  //         <div className="animate-spin rounded-full h-14 w-14 border-b-2 border-r-2 border-blue-500 mx-auto mb-4"></div>
-  //       </div>
-  //     </div>
-  //   );
-  // }
-
-  // if (user) {
-  //   return null;
-  // }
 
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col font-sans overflow-x-hidden relative selection:bg-blue-500/30">

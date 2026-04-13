@@ -7,7 +7,7 @@ import { SlotCard } from './slot-card';
 import { SlotEditor } from './slot-editor';
 import { ShareDialog } from '@/components/dashboard/share-dialog';
 import { PresenceIndicator } from '@/components/dashboard/presence-indicator';
-import { Plus, ChevronLeft, ChevronRight, Share2 } from 'lucide-react';
+import { Plus, ChevronLeft, ChevronRight, Share2, Loader2 } from 'lucide-react';
 import { format, addDays, subDays } from 'date-fns';
 
 interface DailyViewProps {
@@ -60,19 +60,19 @@ export function DailyView({
       {/* Header */}
       <div className="border-b border-border p-6 flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">
+          <h1 className="text-2xl font-bold">
             {format(currentDate, 'EEEE, MMMM d, yyyy')}
           </h1>
           <p className="text-sm text-muted-foreground mt-1">
             {sortedSlots.length} activities scheduled
           </p>
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex flex-col-reverse md:flex-row items-center gap-4">
           <PresenceIndicator
             timetableId={timetable?.id || ''}
             timetableType="daily"
           />
-          <div className="flex gap-2">
+          <div className="flex flex-col-reverse md:flex-row gap-2">
             <Button
               variant="outline"
               onClick={() => setShareOpen(true)}
@@ -117,10 +117,7 @@ export function DailyView({
       {/* Content */}
       {loading ? (
         <div className="flex items-center justify-center flex-1">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-            <p className="text-muted-foreground">Loading timetable...</p>
-          </div>
+          <Loader2 className="animate-spin rounded-full h-8 w-8"/>
         </div>
       ) : (
         <div className="flex-1 overflow-auto">

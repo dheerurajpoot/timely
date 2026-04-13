@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { TimeSlot, DailyTimetable, WeeklyTimetable, MonthlyTimetable } from '@/lib/types';
 import { SlotCard } from './slot-card';
 import { SlotEditor } from './slot-editor';
-import { Plus } from 'lucide-react';
+import { Loader2, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { format, addDays, startOfToday, isAfter, isBefore, startOfDay, endOfDay } from 'date-fns';
 
@@ -118,13 +118,10 @@ export function AgendaView({
     }
   };
 
-  if (loading) {
+ if (loading) {
     return (
       <div className="flex items-center justify-center h-screen">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Loading agenda...</p>
-        </div>
+         <Loader2 className="animate-spin rounded-full h-8 w-8"/>
       </div>
     );
   }

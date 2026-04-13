@@ -43,10 +43,20 @@ export function SignupForm() {
       toast.success('Account created successfully!');
       router.push('/dashboard');
     } catch (error: any) {
-      console.error('Signup error:', error);
-      const errorMessage = error.code === 'auth/email-already-in-use'
-        ? 'Email already in use'
-        : error.message || 'Failed to create account';
+      let errorMessage = 'Failed to create account. Please try again.';
+      
+      if (error?.code === 'auth/email-already-in-use') {
+        errorMessage = 'This email is already registered. Please sign in instead.';
+      } else if (error?.code === 'auth/weak-password') {
+        errorMessage = 'Password should be at least 6 characters.';
+      } else if (error?.code === 'auth/invalid-email') {
+        errorMessage = 'The email address is invalid.';
+      } else if (error?.code === 'auth/network-request-failed') {
+        errorMessage = 'Network error. Please check your connection.';
+      } else if (error?.message) {
+        errorMessage = error.message;
+      }
+
       toast.error(errorMessage);
     } finally {
       setLoading(false);
