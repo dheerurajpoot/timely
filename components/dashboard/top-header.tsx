@@ -4,6 +4,7 @@ import { useAuth } from '@/lib/auth-context';
 import { ThemeToggle } from '@/components/theme-toggle';
 import Link from 'next/link';
 import { UserCircle } from 'lucide-react';
+import Image from 'next/image';
 
 export function TopHeader() {
   const { userProfile } = useAuth();
@@ -12,8 +13,8 @@ export function TopHeader() {
     <header className="sticky top-0 z-30 flex h-16 w-full items-center justify-between border-b border-border bg-background/80 px-6 backdrop-blur-md">
       {/* Left side: App Name */}
       <div className="flex items-center gap-2">
-        <div className="md:hidden w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold shadow-lg">
-          T
+        <div className="md:hidden w-8 h-8 rounded-lg flex items-center justify-center text-white font-bold shadow-lg">
+          <Image src="/logo.png" alt="Logo" width={28} height={28} />
         </div>
         <h1 className="font-bold text-lg bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-purple-600 md:hidden">
           Timely

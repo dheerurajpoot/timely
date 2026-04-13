@@ -140,7 +140,7 @@ export function AgendaView({
       {/* Header */}
       <div className="border-b border-border p-6 flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">Agenda</h1>
+          <h1 className="text-2xl font-bold">Agenda</h1>
           <p className="text-sm text-muted-foreground mt-1">
             {agendaSlots.length} upcoming activities
           </p>

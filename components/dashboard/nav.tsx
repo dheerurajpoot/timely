@@ -7,6 +7,7 @@ import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { Calendar, CalendarDays, Grid3x3, List, LogOut, LogIn, Users } from 'lucide-react';
 import { toast } from 'sonner';
+import Image from 'next/image';
 
 export function DashboardNav() {
   const { signOut, userProfile } = useAuth();
@@ -38,8 +39,8 @@ export function DashboardNav() {
         {/* Header */}
         <div className="p-6 border-b border-border">
           <Link href="/dashboard" className="flex items-center gap-2 transition-transform hover:scale-105 active:scale-95 duration-200">
-            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold shadow-lg shadow-blue-500/20">
-              T
+            <div className="w-10 h-10 rounded-lg flex items-center justify-center text-white font-bold shadow-lg shadow-blue-500/20">
+              <Image src="/logo.png" alt="Logo" width={30} height={30} />
             </div>
             <div>
               <h1 className="font-bold text-lg bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-purple-600">Timely</h1>

@@ -74,12 +74,12 @@ export function WeeklyView({
       {/* Header */}
       <div className="border-b border-border p-6 flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">Weekly Timetable</h1>
+          <h1 className="text-2xl font-bold">Weekly Timetable</h1>
           <p className="text-sm text-muted-foreground mt-1">
             {format(weekStart, 'MMM d')} - {format(weekEnd, 'MMM d, yyyy')}
           </p>
         </div>
-        <div className="flex flex-col-reverse md:flex-row items-center gap-4">
+        <div className="flex flex-col md:flex-row items-center gap-4">
           <CollaboratorsDisplay
             timetableId={timetable?.id || ''}
             ownerId={timetable?.userId || ''}

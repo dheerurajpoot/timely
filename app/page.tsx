@@ -7,6 +7,8 @@ import { Button } from '@/components/ui/button';
 import { Footer } from '@/components/footer';
 import Link from 'next/link';
 import { Calendar, Clock, Share2, Zap, Users, BarChart3, ChevronRight, CheckCircle2, Shield, LayoutDashboard, Sparkles } from 'lucide-react';
+import Image from 'next/image';
+import { ThemeToggle } from '@/components/theme-toggle';
 
 export default function HomePage() {
   const { user, loading } = useAuth();
@@ -33,12 +35,13 @@ export default function HomePage() {
       <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-background/80 backdrop-blur-xl border-b border-border/50 shadow-sm' : 'bg-transparent'}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3 transition-transform hover:scale-105 active:scale-95 duration-200">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-blue-500/25">
-              T
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-blue-500/25">
+              <Image src="/logo.png" alt="Logo" width={28} height={28} />
             </div>
             <span className="font-bold text-2xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-purple-600 hidden sm:inline">Timely</span>
           </Link>
           <div className="flex gap-3 sm:gap-4 items-center">
+            <ThemeToggle />
             <Link href="/login">
               <Button variant="ghost" className="font-semibold text-muted-foreground hover:text-foreground">Log in</Button>
             </Link>
