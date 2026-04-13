@@ -15,6 +15,12 @@ import {
   createMonthlyTimetable,
   updateMonthlyTimetable,
   subscribeToMonthlyTimetable,
+  getDailyTimetableById,
+  subscribeToDailyTimetableById,
+  getWeeklyTimetableById,
+  subscribeToWeeklyTimetableById,
+  getMonthlyTimetableById,
+  subscribeToMonthlyTimetableById,
 } from '@/lib/firestore-utils';
 
 export function useDailyTimetable(userId: string | undefined, date: string) {
@@ -283,4 +289,208 @@ export function useMonthlyTimetable(userId: string | undefined, month: string) {
     updateSlot,
     removeSlot,
   };
+}
+
+export function useSharedDailyTimetable(id: string) {
+  const [timetable, setTimetable] = useState<DailyTimetable | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!id) return;
+    setLoading(true);
+    const loadTimetable = async () => {
+      try {
+        const tt = await getDailyTimetableById(id);
+        setTimetable(tt);
+      } catch (err: any) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadTimetable();
+    const unsubscribe = subscribeToDailyTimetableById(id, (updated) => {
+      if (updated) setTimetable(updated);
+    });
+    return unsubscribe;
+  }, [id]);
+
+  const addSlot = useCallback(
+    async (slot: TimeSlot) => {
+      if (!timetable) return;
+      const updated = { ...timetable, slots: [...timetable.slots, slot] };
+      setTimetable(updated);
+      await updateDailyTimetable(updated);
+    },
+    [timetable]
+  );
+  const updateSlot = useCallback(
+    async (slotId: string, updates: Partial<TimeSlot>) => {
+      if (!timetable) return;
+      const updated = {
+        ...timetable,
+        slots: timetable.slots.map((slot) => slot.id === slotId ? { ...slot, ...updates } : slot),
+      };
+      setTimetable(updated);
+      await updateDailyTimetable(updated);
+    },
+    [timetable]
+  );
+  const removeSlot = useCallback(
+    async (slotId: string) => {
+      if (!timetable) return;
+      const updated = {
+        ...timetable,
+        slots: timetable.slots.filter((slot) => slot.id !== slotId),
+      };
+      setTimetable(updated);
+      await updateDailyTimetable(updated);
+    },
+    [timetable]
+  );
+
+  return { timetable, loading, error, addSlot, updateSlot, removeSlot };
+}
+
+export function useSharedWeeklyTimetable(id: string) {
+  const [timetable, setTimetable] = useState<WeeklyTimetable | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!id) return;
+    setLoading(true);
+    const loadTimetable = async () => {
+      try {
+        const tt = await getWeeklyTimetableById(id);
+        setTimetable(tt);
+      } catch (err: any) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadTimetable();
+    const unsubscribe = subscribeToWeeklyTimetableById(id, (updated) => {
+      if (updated) setTimetable(updated);
+    });
+    return unsubscribe;
+  }, [id]);
+
+  const addSlot = useCallback(
+    async (day: string, slot: TimeSlot) => {
+      if (!timetable) return;
+      const updated = {
+        ...timetable,
+        slots: { ...timetable.slots, [day]: [...(timetable.slots[day] || []), slot] },
+      };
+      setTimetable(updated);
+      await updateWeeklyTimetable(updated);
+    },
+    [timetable]
+  );
+  const updateSlot = useCallback(
+    async (day: string, slotId: string, updates: Partial<TimeSlot>) => {
+      if (!timetable) return;
+      const updated = {
+        ...timetable,
+        slots: {
+          ...timetable.slots,
+          [day]: (timetable.slots[day] || []).map((slot) => slot.id === slotId ? { ...slot, ...updates } : slot),
+        },
+      };
+      setTimetable(updated);
+      await updateWeeklyTimetable(updated);
+    },
+    [timetable]
+  );
+  const removeSlot = useCallback(
+    async (day: string, slotId: string) => {
+      if (!timetable) return;
+      const updated = {
+        ...timetable,
+        slots: {
+          ...timetable.slots,
+          [day]: (timetable.slots[day] || []).filter((slot) => slot.id !== slotId),
+        },
+      };
+      setTimetable(updated);
+      await updateWeeklyTimetable(updated);
+    },
+    [timetable]
+  );
+
+  return { timetable, loading, error, addSlot, updateSlot, removeSlot };
+}
+
+export function useSharedMonthlyTimetable(id: string) {
+  const [timetable, setTimetable] = useState<MonthlyTimetable | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!id) return;
+    setLoading(true);
+    const loadTimetable = async () => {
+      try {
+        const tt = await getMonthlyTimetableById(id);
+        setTimetable(tt);
+      } catch (err: any) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadTimetable();
+    const unsubscribe = subscribeToMonthlyTimetableById(id, (updated) => {
+      if (updated) setTimetable(updated);
+    });
+    return unsubscribe;
+  }, [id]);
+
+  const addSlot = useCallback(
+    async (date: string, slot: TimeSlot) => {
+      if (!timetable) return;
+      const updated = {
+        ...timetable,
+        events: { ...timetable.events, [date]: [...(timetable.events[date] || []), slot] },
+      };
+      setTimetable(updated);
+      await updateMonthlyTimetable(updated);
+    },
+    [timetable]
+  );
+  const updateSlot = useCallback(
+    async (date: string, slotId: string, updates: Partial<TimeSlot>) => {
+      if (!timetable) return;
+      const updated = {
+        ...timetable,
+        events: {
+          ...timetable.events,
+          [date]: (timetable.events[date] || []).map((slot) => slot.id === slotId ? { ...slot, ...updates } : slot),
+        },
+      };
+      setTimetable(updated);
+      await updateMonthlyTimetable(updated);
+    },
+    [timetable]
+  );
+  const removeSlot = useCallback(
+    async (date: string, slotId: string) => {
+      if (!timetable) return;
+      const updated = {
+        ...timetable,
+        events: {
+          ...timetable.events,
+          [date]: (timetable.events[date] || []).filter((slot) => slot.id !== slotId),
+        },
+      };
+      setTimetable(updated);
+      await updateMonthlyTimetable(updated);
+    },
+    [timetable]
+  );
+
+  return { timetable, loading, error, addSlot, updateSlot, removeSlot };
 }

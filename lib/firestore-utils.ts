@@ -70,10 +70,19 @@ export async function createDailyTimetable(userId: string, date: string): Promis
 export async function getDailyTimetable(userId: string, date: string): Promise<DailyTimetable | null> {
   try {
     const id = `daily_${userId}_${date}`;
+    return await getDailyTimetableById(id);
+  } catch (error) {
+    console.error('Error getting daily timetable:', error);
+    throw error;
+  }
+}
+
+export async function getDailyTimetableById(id: string): Promise<DailyTimetable | null> {
+  try {
     const docSnap = await getDoc(doc(db, 'daily_timetables', id));
     return docSnap.exists() ? (docSnap.data() as DailyTimetable) : null;
   } catch (error) {
-    console.error('Error getting daily timetable:', error);
+    console.error('Error getting daily timetable by id:', error);
     throw error;
   }
 }
@@ -97,6 +106,13 @@ export function subscribeToDailyTimetable(
   callback: (timetable: DailyTimetable | null) => void
 ) {
   const id = `daily_${userId}_${date}`;
+  return subscribeToDailyTimetableById(id, callback);
+}
+
+export function subscribeToDailyTimetableById(
+  id: string,
+  callback: (timetable: DailyTimetable | null) => void
+) {
   return onSnapshot(doc(db, 'daily_timetables', id), (docSnap) => {
     if (docSnap.exists()) {
       callback(docSnap.data() as DailyTimetable);
@@ -139,10 +155,19 @@ export async function createWeeklyTimetable(userId: string, weekStart: string, n
 export async function getWeeklyTimetable(userId: string, weekStart: string): Promise<WeeklyTimetable | null> {
   try {
     const id = `weekly_${userId}_${weekStart}`;
+    return await getWeeklyTimetableById(id);
+  } catch (error) {
+    console.error('Error getting weekly timetable:', error);
+    throw error;
+  }
+}
+
+export async function getWeeklyTimetableById(id: string): Promise<WeeklyTimetable | null> {
+  try {
     const docSnap = await getDoc(doc(db, 'weekly_timetables', id));
     return docSnap.exists() ? (docSnap.data() as WeeklyTimetable) : null;
   } catch (error) {
-    console.error('Error getting weekly timetable:', error);
+    console.error('Error getting weekly timetable by id:', error);
     throw error;
   }
 }
@@ -166,6 +191,13 @@ export function subscribeToWeeklyTimetable(
   callback: (timetable: WeeklyTimetable | null) => void
 ) {
   const id = `weekly_${userId}_${weekStart}`;
+  return subscribeToWeeklyTimetableById(id, callback);
+}
+
+export function subscribeToWeeklyTimetableById(
+  id: string,
+  callback: (timetable: WeeklyTimetable | null) => void
+) {
   return onSnapshot(doc(db, 'weekly_timetables', id), (docSnap) => {
     if (docSnap.exists()) {
       callback(docSnap.data() as WeeklyTimetable);
@@ -200,10 +232,19 @@ export async function createMonthlyTimetable(userId: string, month: string, name
 export async function getMonthlyTimetable(userId: string, month: string): Promise<MonthlyTimetable | null> {
   try {
     const id = `monthly_${userId}_${month}`;
+    return await getMonthlyTimetableById(id);
+  } catch (error) {
+    console.error('Error getting monthly timetable:', error);
+    throw error;
+  }
+}
+
+export async function getMonthlyTimetableById(id: string): Promise<MonthlyTimetable | null> {
+  try {
     const docSnap = await getDoc(doc(db, 'monthly_timetables', id));
     return docSnap.exists() ? (docSnap.data() as MonthlyTimetable) : null;
   } catch (error) {
-    console.error('Error getting monthly timetable:', error);
+    console.error('Error getting monthly timetable by id:', error);
     throw error;
   }
 }
@@ -227,6 +268,13 @@ export function subscribeToMonthlyTimetable(
   callback: (timetable: MonthlyTimetable | null) => void
 ) {
   const id = `monthly_${userId}_${month}`;
+  return subscribeToMonthlyTimetableById(id, callback);
+}
+
+export function subscribeToMonthlyTimetableById(
+  id: string,
+  callback: (timetable: MonthlyTimetable | null) => void
+) {
   return onSnapshot(doc(db, 'monthly_timetables', id), (docSnap) => {
     if (docSnap.exists()) {
       callback(docSnap.data() as MonthlyTimetable);
@@ -241,7 +289,8 @@ export async function shareTimetable(
   timetableId: string,
   timetableType: 'daily' | 'weekly' | 'monthly',
   ownerId: string,
-  email: string
+  email: string,
+  role: 'viewer' | 'editor'
 ): Promise<SharedTimetable> {
   try {
     const id = `share_${timetableId}_${email}`;
@@ -250,11 +299,12 @@ export async function shareTimetable(
       timetableId,
       timetableType,
       ownerId,
+      targetEmail: email.toLowerCase(),
       sharedWith: [
         {
-          userId: email,
-          email,
-          role: 'editor',
+          userId: email, // Since we index by email
+          email: email.toLowerCase(),
+          role,
           addedAt: Date.now(),
         },
       ],
@@ -270,13 +320,24 @@ export async function shareTimetable(
   }
 }
 
-export async function getSharedTimetables(userId: string): Promise<SharedTimetable[]> {
+export async function getSharedTimetablesByEmail(email: string): Promise<SharedTimetable[]> {
   try {
-    const q = query(collection(db, 'shared_timetables'), where('ownerId', '==', userId));
+    const q = query(collection(db, 'shared_timetables'), where('targetEmail', '==', email.toLowerCase()));
     const querySnapshot = await getDocs(q);
     return querySnapshot.docs.map(doc => doc.data() as SharedTimetable);
   } catch (error) {
-    console.error('Error getting shared timetables:', error);
+    console.error('Error getting shared timetables by email:', error);
+    throw error;
+  }
+}
+
+export async function getTimetableCollaborators(timetableId: string): Promise<SharedTimetable[]> {
+  try {
+    const q = query(collection(db, 'shared_timetables'), where('timetableId', '==', timetableId));
+    const querySnapshot = await getDocs(q);
+    return querySnapshot.docs.map(doc => doc.data() as SharedTimetable);
+  } catch (error) {
+    console.error('Error getting collaborators:', error);
     throw error;
   }
 }

@@ -28,7 +28,7 @@ export function ShareDialog({
   const [sharing, setSharing] = useState(false);
   const [copied, setCopied] = useState(false);
 
-  const shareLink = `${typeof window !== 'undefined' ? window.location.origin : ''}/shared/${timetableType}/${timetableId}`;
+  const shareLink = `${typeof window !== 'undefined' ? window.location.origin : ''}/dashboard/shared/${timetableType}/${timetableId}`;
 
   const handleShare = async () => {
     if (!email.trim()) {

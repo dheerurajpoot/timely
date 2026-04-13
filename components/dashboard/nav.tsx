@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
-import { Calendar, CalendarDays, Grid3x3, List, LogOut, LogIn } from 'lucide-react';
+import { Calendar, CalendarDays, Grid3x3, List, LogOut, LogIn, Users } from 'lucide-react';
 import { toast } from 'sonner';
 
 export function DashboardNav() {
@@ -28,6 +28,7 @@ export function DashboardNav() {
     { label: 'Weekly', href: '/dashboard/weekly', icon: Calendar },
     { label: 'Monthly', href: '/dashboard/monthly', icon: CalendarDays },
     { label: 'Agenda', href: '/dashboard/agenda', icon: List },
+    { label: 'Shared', href: '/dashboard/shared', icon: Users },
   ];
 
   return (

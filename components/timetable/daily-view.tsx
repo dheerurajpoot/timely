@@ -6,7 +6,8 @@ import { Button } from '@/components/ui/button';
 import { SlotCard } from './slot-card';
 import { SlotEditor } from './slot-editor';
 import { ShareDialog } from '@/components/dashboard/share-dialog';
-import { PresenceIndicator } from '@/components/dashboard/presence-indicator';
+import { CollaboratorsDisplay } from '@/components/dashboard/collaborators-display';
+import { shareTimetable } from '@/lib/firestore-utils';
 import { Plus, ChevronLeft, ChevronRight, Share2, Loader2 } from 'lucide-react';
 import { format, addDays, subDays } from 'date-fns';
 
@@ -68,9 +69,9 @@ export function DailyView({
           </p>
         </div>
         <div className="flex flex-col-reverse md:flex-row items-center gap-4">
-          <PresenceIndicator
+          <CollaboratorsDisplay
             timetableId={timetable?.id || ''}
-            timetableType="daily"
+            ownerId={timetable?.userId || ''}
           />
           <div className="flex flex-col-reverse md:flex-row gap-2">
             <Button
@@ -166,8 +167,8 @@ export function DailyView({
         timetableId={timetable?.id || ''}
         timetableType="daily"
         onShare={async (email, role) => {
-          // Share logic would be implemented here
-          console.log(`Sharing with ${email} as ${role}`);
+          if (!timetable) return;
+          await shareTimetable(timetable.id, 'daily', timetable.userId, email, role);
         }}
       />
     </div>

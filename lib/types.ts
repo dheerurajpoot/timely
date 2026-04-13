@@ -43,6 +43,7 @@ export type SharedTimetable = {
   timetableId: string;
   timetableType: 'daily' | 'weekly' | 'monthly';
   ownerId: string;
+  targetEmail: string; // Enables simplified querying for 'Shared With Me'
   sharedWith: SharedAccess[];
   createdAt: number;
   updatedAt: number;

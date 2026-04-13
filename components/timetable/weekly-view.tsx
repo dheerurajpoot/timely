@@ -5,7 +5,10 @@ import { WeeklyTimetable, TimeSlot } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { SlotCard } from './slot-card';
 import { SlotEditor } from './slot-editor';
-import { Plus, ChevronLeft, ChevronRight, Loader2 } from 'lucide-react';
+import { ShareDialog } from '@/components/dashboard/share-dialog';
+import { CollaboratorsDisplay } from '@/components/dashboard/collaborators-display';
+import { shareTimetable } from '@/lib/firestore-utils';
+import { Plus, ChevronLeft, ChevronRight, Share2, Loader2 } from 'lucide-react';
 import { format, addWeeks, subWeeks, startOfWeek } from 'date-fns';
 
 interface WeeklyViewProps {
@@ -32,6 +35,7 @@ export function WeeklyView({
   const [editorOpen, setEditorOpen] = useState(false);
   const [selectedSlot, setSelectedSlot] = useState<TimeSlot | undefined>();
   const [selectedDay, setSelectedDay] = useState<string>('Monday');
+  const [shareOpen, setShareOpen] = useState(false);
 
   const weekStart = startOfWeek(currentDate, { weekStartsOn: 1 });
   const weekEnd = new Date(weekStart);
@@ -74,6 +78,20 @@ export function WeeklyView({
           <p className="text-sm text-muted-foreground mt-1">
             {format(weekStart, 'MMM d')} - {format(weekEnd, 'MMM d, yyyy')}
           </p>
+        </div>
+        <div className="flex flex-col-reverse md:flex-row items-center gap-4">
+          <CollaboratorsDisplay
+            timetableId={timetable?.id || ''}
+            ownerId={timetable?.userId || ''}
+          />
+          <Button
+            variant="outline"
+            onClick={() => setShareOpen(true)}
+            className="gap-2"
+          >
+            <Share2 size={20} />
+            Share
+          </Button>
         </div>
       </div>
 
@@ -156,6 +174,18 @@ export function WeeklyView({
           setSelectedSlot(undefined);
         }}
         onSave={handleSaveSlot}
+      />
+
+      {/* Share Dialog */}
+      <ShareDialog
+        isOpen={shareOpen}
+        onClose={() => setShareOpen(false)}
+        timetableId={timetable?.id || ''}
+        timetableType="weekly"
+        onShare={async (email, role) => {
+          if (!timetable) return;
+          await shareTimetable(timetable.id, 'weekly', timetable.userId, email, role);
+        }}
       />
     </div>
   );

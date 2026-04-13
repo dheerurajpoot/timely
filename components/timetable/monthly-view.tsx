@@ -4,7 +4,10 @@ import { useState } from 'react';
 import { MonthlyTimetable, TimeSlot } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { SlotEditor } from './slot-editor';
-import { Plus, ChevronLeft, ChevronRight, Loader2 } from 'lucide-react';
+import { ShareDialog } from '@/components/dashboard/share-dialog';
+import { CollaboratorsDisplay } from '@/components/dashboard/collaborators-display';
+import { shareTimetable } from '@/lib/firestore-utils';
+import { Plus, ChevronLeft, ChevronRight, Share2, Loader2 } from 'lucide-react';
 import { format, addMonths, subMonths, getDaysInMonth, startOfMonth } from 'date-fns';
 
 interface MonthlyViewProps {
@@ -29,6 +32,7 @@ export function MonthlyView({
   const [editorOpen, setEditorOpen] = useState(false);
   const [selectedSlot, setSelectedSlot] = useState<TimeSlot | undefined>();
   const [selectedDate, setSelectedDate] = useState<string>('');
+  const [shareOpen, setShareOpen] = useState(false);
 
   const monthStart = startOfMonth(currentDate);
   const daysInMonth = getDaysInMonth(monthStart);
@@ -68,30 +72,46 @@ export function MonthlyView({
   return (
     <div className="h-full flex flex-col bg-background">
       {/* Header */}
-      <div className="border-b border-border p-6 flex items-center justify-between">
+      <div className="border-b border-border p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <h1 className="text-2xl font-bold">{format(monthStart, 'MMMM yyyy')}</h1>
-        <div className="flex gap-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => onDateChange(subMonths(currentDate, 1))}
-          >
-            <ChevronLeft size={16} />
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => onDateChange(new Date())}
-          >
-            Today
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => onDateChange(addMonths(currentDate, 1))}
-          >
-            <ChevronRight size={16} />
-          </Button>
+        <div className="flex flex-col-reverse md:flex-row items-center gap-4">
+          <CollaboratorsDisplay
+            timetableId={timetable?.id || ''}
+            ownerId={timetable?.userId || ''}
+          />
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              onClick={() => setShareOpen(true)}
+              className="gap-2"
+            >
+              <Share2 size={20} />
+              Share
+            </Button>
+            <div className="flex gap-2 border-l border-border pl-2 border-r pr-2 shadow-sm rounded-md overflow-hidden">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => onDateChange(subMonths(currentDate, 1))}
+              >
+                <ChevronLeft size={16} />
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => onDateChange(new Date())}
+              >
+                Today
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => onDateChange(addMonths(currentDate, 1))}
+              >
+                <ChevronRight size={16} />
+              </Button>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -178,6 +198,18 @@ export function MonthlyView({
           setSelectedSlot(undefined);
         }}
         onSave={handleSaveSlot}
+      />
+
+      {/* Share Dialog */}
+      <ShareDialog
+        isOpen={shareOpen}
+        onClose={() => setShareOpen(false)}
+        timetableId={timetable?.id || ''}
+        timetableType="monthly"
+        onShare={async (email, role) => {
+          if (!timetable) return;
+          await shareTimetable(timetable.id, 'monthly', timetable.userId, email, role);
+        }}
       />
     </div>
   );
