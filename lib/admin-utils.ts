@@ -22,6 +22,9 @@ import {
   ContactSubmission,
   SupportTicket,
   AdminStats,
+  DailyTimetable,
+  WeeklyTimetable,
+  MonthlyTimetable,
 } from './types';
 
 // User Management
@@ -50,6 +53,16 @@ export const updateUserStatus = async (
   });
 };
 
+export const updateUserProfile = async (
+  userId: string,
+  updates: Partial<UserProfile>
+): Promise<void> => {
+  await updateDoc(doc(db, 'users', userId), {
+    ...updates,
+    updatedAt: Timestamp.now().toMillis(),
+  });
+};
+
 export const searchUsers = async (searchTerm: string): Promise<UserProfile[]> => {
   const q = query(
     collection(db, 'users'),
@@ -59,6 +72,25 @@ export const searchUsers = async (searchTerm: string): Promise<UserProfile[]> =>
   );
   const snapshot = await getDocs(q);
   return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as UserProfile));
+};
+
+// Global Task Management
+export const getAllDailyTimetables = async (): Promise<DailyTimetable[]> => {
+  const q = query(collection(db, 'daily_timetables'), orderBy('createdAt', 'desc'));
+  const snapshot = await getDocs(q);
+  return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() } as DailyTimetable));
+};
+
+export const getAllWeeklyTimetables = async (): Promise<WeeklyTimetable[]> => {
+  const q = query(collection(db, 'weekly_timetables'), orderBy('createdAt', 'desc'));
+  const snapshot = await getDocs(q);
+  return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() } as WeeklyTimetable));
+};
+
+export const getAllMonthlyTimetables = async (): Promise<MonthlyTimetable[]> => {
+  const q = query(collection(db, 'monthly_timetables'), orderBy('createdAt', 'desc'));
+  const snapshot = await getDocs(q);
+  return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() } as MonthlyTimetable));
 };
 
 // Announcement Management

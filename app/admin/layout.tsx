@@ -8,7 +8,7 @@ export default function AdminLayout({
 }) {
   return (
     <AdminProtectedRoute>
-      <div className="flex min-h-screen bg-background">
+      <div className="flex flex-col md:flex-row min-h-screen bg-background">
         <AdminNav />
         <main className="flex-1 overflow-auto">
           <div className="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto">

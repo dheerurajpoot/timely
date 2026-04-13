@@ -10,9 +10,8 @@ import {
   Users,
   Mail,
   Megaphone,
-  FileText,
-  TicketIcon,
   Settings,
+  FileText,
   LogOut,
   Menu,
   X,
@@ -23,10 +22,9 @@ import { toast } from 'sonner';
 const navItems = [
   { href: '/admin', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/admin/users', label: 'Users', icon: Users },
+  { href: '/admin/tasks', label: 'Tasks Management', icon: FileText },
   { href: '/admin/contact', label: 'Contact Submissions', icon: Mail },
   { href: '/admin/announcements', label: 'Announcements', icon: Megaphone },
-  { href: '/admin/content', label: 'Content Pages', icon: FileText },
-  { href: '/admin/tickets', label: 'Support Tickets', icon: TicketIcon },
   { href: '/admin/settings', label: 'Settings', icon: Settings },
 ];
 
@@ -66,7 +64,7 @@ export function AdminNav() {
 
       {/* Sidebar */}
       <aside
-        className={`fixed md:static top-0 left-0 h-screen w-64 bg-muted border-r border-border p-4 flex flex-col z-50 transform transition-transform md:transform-none ${
+        className={`fixed md:static top-0 left-0 h-screen w-64 bg-muted border-r border-border p-4 flex flex-col z-50 transition-transform md:translate-x-0 ${
           sidebarOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
