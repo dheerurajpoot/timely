@@ -31,7 +31,7 @@ export function AnnouncementsManager() {
   const [formData, setFormData] = useState({
     title: '',
     content: '',
-    type: 'info' as const,
+    type: 'info' as 'info' | 'warning' | 'success' | 'error',
     visible: true,
   });
   const [loading, setLoading] = useState(true);

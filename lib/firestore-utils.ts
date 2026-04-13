@@ -22,6 +22,8 @@ export async function createUserProfile(userId: string, email: string, displayNa
       id: userId,
       email,
       displayName,
+      role: 'user',
+      status: 'active',
       createdAt: Date.now(),
       updatedAt: Date.now(),
     };

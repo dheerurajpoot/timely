@@ -32,13 +32,13 @@ const navItems = [
 
 export function AdminNav() {
   const pathname = usePathname();
-  const { logOut, userProfile } = useAuth();
+  const { signOut, userProfile } = useAuth();
   const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const handleSignOut = async () => {
     try {
-      await logOut();
+      await signOut();
       toast.success('Signed out successfully');
       router.push('/');
     } catch (error) {

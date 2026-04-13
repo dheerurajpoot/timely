@@ -15,9 +15,9 @@ export default function DashboardLayout({
   return (
     <AuthProvider>
       <ProtectedRoute>
-        <div className="flex h-screen bg-background">
+        <div className="flex flex-col md:flex-row h-screen bg-background text-foreground overflow-hidden">
           <DashboardNav />
-          <main className="flex-1 overflow-auto">
+          <main className="flex-1 overflow-y-auto overflow-x-hidden pb-[72px] md:pb-0">
             {children}
           </main>
         </div>
