@@ -1,0 +1,30 @@
+'use client';
+
+import { useState } from 'react';
+import { useAuth } from '@/lib/auth-context';
+import { useDailyTimetable } from '@/hooks/use-timetable';
+import { DailyView } from '@/components/timetable/daily-view';
+import { format } from 'date-fns';
+
+export default function DashboardPage() {
+  const { user } = useAuth();
+  const [currentDate, setCurrentDate] = useState(new Date());
+  const dateStr = format(currentDate, 'yyyy-MM-dd');
+  
+  const { timetable, loading, addSlot, updateSlot, removeSlot } = useDailyTimetable(
+    user?.uid,
+    dateStr
+  );
+
+  return (
+    <DailyView
+      timetable={timetable}
+      currentDate={currentDate}
+      onDateChange={setCurrentDate}
+      onAddSlot={addSlot}
+      onUpdateSlot={updateSlot}
+      onDeleteSlot={removeSlot}
+      loading={loading}
+    />
+  );
+}
