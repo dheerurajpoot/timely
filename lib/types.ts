@@ -6,6 +6,7 @@ export type TimeSlot = {
   endTime: string; // HH:MM format
   color: string;
   category?: string;
+  completed?: boolean;
 };
 
 export type DailyTimetable = {

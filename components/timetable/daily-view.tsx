@@ -137,6 +137,9 @@ export function DailyView({
                     slot={slot}
                     onEdit={handleEdit}
                     onDelete={onDeleteSlot}
+                    onToggleComplete={async (slotId, completed) => {
+                      await onUpdateSlot(slotId, { completed });
+                    }}
                   />
                 ))}
               </div>

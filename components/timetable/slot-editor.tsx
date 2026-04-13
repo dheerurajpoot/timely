@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { TimeSlot } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -32,6 +32,16 @@ export function SlotEditor({ isOpen, slot, onClose, onSave }: SlotEditorProps) {
   const [endTime, setEndTime] = useState(slot?.endTime || '10:00');
   const [color, setColor] = useState(slot?.color || COLORS[4]);
   const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    if (isOpen) {
+      setTitle(slot?.title || '');
+      setDescription(slot?.description || '');
+      setStartTime(slot?.startTime || '09:00');
+      setEndTime(slot?.endTime || '10:00');
+      setColor(slot?.color || COLORS[4]);
+    }
+  }, [isOpen, slot]);
 
   const handleSave = async () => {
     if (!title.trim()) return;
