@@ -4,8 +4,8 @@ import { Analytics } from '@vercel/analytics/next'
 import { ThemeProvider } from 'next-themes'
 import { AuthProvider } from '@/lib/auth-context'
 import { OfflineIndicator } from '@/components/offline-indicator'
-import { PWAInstallPrompt } from '@/components/pwa-install-prompt'
 import './globals.css'
+import { Toaster } from 'sonner'
 
 const _geist = Geist({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
@@ -45,6 +45,9 @@ export const viewport: Viewport = {
   ],
 }
 
+import { GlobalHeader } from '@/components/global-header'
+import { GlobalNav } from '@/components/global-nav'
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -59,13 +62,21 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-title" content="Timely" />
         <link rel="icon" href="/favicon.ico" sizes="any" />
       </head>
-      <body className="font-sans antialiased bg-background text-foreground" suppressHydrationWarning>
+      <body className="font-sans antialiased bg-background text-foreground overflow-hidden" suppressHydrationWarning>
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
           <AuthProvider>
-            {children}
-            <OfflineIndicator />
-            {/* <PWAInstallPrompt /> */}
+            <div className="flex flex-col h-screen overflow-hidden">
+              <GlobalHeader />
+              <div className="flex flex-1 overflow-hidden">
+                <GlobalNav />
+                <main className="flex-1 overflow-y-auto overflow-x-hidden pb-[72px] md:pb-0 relative scroll-smooth">
+                  {children}
+                  <OfflineIndicator />
+                </main>
+              </div>
+            </div>
           </AuthProvider>
+          <Toaster richColors />
         </ThemeProvider>
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>

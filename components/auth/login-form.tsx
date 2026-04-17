@@ -31,11 +31,36 @@ export function LoginForm() {
       router.push('/dashboard');
     } catch (error: any) {
       console.error('Login error:', error);
-      const errorMessage = error.code === 'auth/user-not-found'
-        ? 'User not found'
-        : error.code === 'auth/wrong-password'
-        ? 'Wrong password'
-        : error.message || 'Failed to sign in';
+      
+      let errorMessage = 'Failed to sign in. Please try again.';
+      
+      if (error.code) {
+        switch (error.code) {
+          case 'auth/invalid-credential':
+          case 'auth/user-not-found':
+          case 'auth/wrong-password':
+            errorMessage = 'Invalid email or password. Please try again.';
+            break;
+          case 'auth/user-disabled':
+            errorMessage = 'This account has been disabled. Please contact support.';
+            break;
+          case 'auth/too-many-requests':
+            errorMessage = 'Too many failed login attempts. Please try again later.';
+            break;
+          case 'auth/network-request-failed':
+            errorMessage = 'Network error. Please check your internet connection.';
+            break;
+          case 'auth/invalid-email':
+            errorMessage = 'Please enter a valid email address.';
+            break;
+          default:
+            errorMessage = error.message || 'An unexpected error occurred during sign in.';
+            break;
+        }
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      
       toast.error(errorMessage);
     } finally {
       setLoading(false);

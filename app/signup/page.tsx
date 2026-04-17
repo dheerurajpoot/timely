@@ -7,7 +7,7 @@ export const metadata = {
 
 export default function SignupPage() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background p-4">
+    <div className="h-[calc(100vh-10rem)] flex items-center justify-center bg-background p-4">
       <div className="w-full flex flex-col items-center justify-center">
         <div className="mb-8 text-center">
           <h1 className="text-4xl font-bold mb-2">Timely</h1>

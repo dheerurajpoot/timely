@@ -1,60 +1,21 @@
 'use client';
 
-import { useAuth } from '@/lib/auth-context';
-import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Footer } from '@/components/footer';
 import Link from 'next/link';
-import { Calendar, Clock, Share2, Zap, Users, BarChart3, ChevronRight, CheckCircle2, Shield, LayoutDashboard, Sparkles } from 'lucide-react';
-import Image from 'next/image';
-import { ThemeToggle } from '@/components/theme-toggle';
+import { Calendar, Share2, Zap, Users, BarChart3, CheckCircle2, Shield, LayoutDashboard, Sparkles, Download } from 'lucide-react';
+import { usePWAInstall } from '@/hooks/use-pwa-install';
 
 export default function HomePage() {
-  const { user, loading } = useAuth();
-  const router = useRouter();
-  const [isScrolled, setIsScrolled] = useState(false);
-
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
+  const { installPrompt, isInstalled, handleInstall } = usePWAInstall();
 
   return (
-    <div className="min-h-screen bg-background text-foreground flex flex-col font-sans overflow-x-hidden relative selection:bg-blue-500/30">
+    <div className="flex flex-col font-sans overflow-x-hidden relative selection:bg-blue-500/30">
       {/* Background Orbs */}
       <div className="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vw] rounded-full bg-blue-600/20 blur-[120px] -z-10 animate-pulse pointer-events-none" style={{ animationDuration: '4s' }} />
       <div className="absolute top-[20%] right-[-10%] w-[40vw] h-[40vw] rounded-full bg-purple-600/20 blur-[120px] -z-10 animate-pulse pointer-events-none" style={{ animationDuration: '6s' }} />
       
-      {/* Navigation */}
-      <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-background/80 backdrop-blur-xl border-b border-border/50 shadow-sm' : 'bg-transparent'}`}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-3 transition-transform hover:scale-105 active:scale-95 duration-200">
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-blue-500/25">
-              <Image src="/logo.png" alt="Logo" width={28} height={28} />
-            </div>
-            <span className="font-bold text-2xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-purple-600 hidden sm:inline">Timely</span>
-          </Link>
-          <div className="flex gap-3 sm:gap-4 items-center">
-            <ThemeToggle />
-            <Link href="/login">
-              <Button variant="ghost" className="font-semibold text-muted-foreground hover:text-foreground">Log in</Button>
-            </Link>
-            <Link href="/signup">
-              <Button className="rounded-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold shadow-lg shadow-blue-500/20 border-0 transition-transform hover:-translate-y-0.5">
-                Join Free <ChevronRight className="w-4 h-4 ml-1" />
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </nav>
-
-      <main className="flex-1 mt-20">
+      <main className="flex-1">
         {/* Hero Section */}
         <section className="relative pt-12 pb-20 sm:pt-24 sm:pb-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 items-center">
@@ -63,7 +24,7 @@ export default function HomePage() {
                 <Sparkles className="w-4 h-4" />
                 <span>The ultimate planning tool</span>
               </div>
-              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold leading-[1.1] mb-6 tracking-tight">
+              <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold leading-[1.1] mb-6 tracking-tight">
                 Manage your time, <br className="hidden lg:block" />
                 <span className="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">
                   beautifully.
@@ -74,15 +35,16 @@ export default function HomePage() {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                 <Link href="/signup">
-                  <Button size="lg" className="w-full sm:w-auto h-14 px-8 text-lg rounded-full bg-foreground text-background hover:bg-foreground/90 transition-transform hover:-translate-y-1 shadow-xl">
+                  <Button size="sm" className="w-full sm:w-auto h-12 px-8 text-lg rounded-full bg-foreground text-background hover:bg-foreground/90 transition-transform hover:-translate-y-1 shadow-xl">
                     Get Started Free
                   </Button>
                 </Link>
-                <Link href="#features">
-                  <Button variant="outline" size="lg" className="w-full sm:w-auto h-14 px-8 text-lg rounded-full border-border hover:bg-muted/50 backdrop-blur-sm transition-transform hover:-translate-y-1">
-                    See Features
+                {!isInstalled && installPrompt && (
+                  <Button onClick={handleInstall} variant="outline" size="sm" className="w-full sm:w-auto h-12 px-8 text-lg rounded-full border-blue-500/30 text-blue-500 hover:bg-blue-500/10 transition-transform hover:-translate-y-1 flex items-center gap-2">
+                    <Download className="w-5 h-5" />
+                    Download App
                   </Button>
-                </Link>
+                )}
               </div>
               <div className="mt-8 flex items-center justify-center lg:justify-start gap-4 text-sm text-muted-foreground">
                 <div className="flex -space-x-2">
