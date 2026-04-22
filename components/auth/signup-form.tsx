@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, setPersistence, browserLocalPersistence } from 'firebase/auth';
 import { auth, db } from '@/lib/firebase';
 import { createUserProfile } from '@/lib/firestore-utils';
 import { Button } from '@/components/ui/button';
@@ -33,6 +33,7 @@ export function SignupForm() {
 
     setLoading(true);
     try {
+      await setPersistence(auth, browserLocalPersistence);
       // Create Firebase user
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;

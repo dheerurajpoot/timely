@@ -5,9 +5,20 @@ import { Footer } from '@/components/footer';
 import Link from 'next/link';
 import { Calendar, Share2, Zap, Users, BarChart3, CheckCircle2, Shield, LayoutDashboard, Sparkles, Download } from 'lucide-react';
 import { usePWAInstall } from '@/hooks/use-pwa-install';
+import { useAuth } from '@/lib/auth-context';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
 export default function HomePage() {
   const { installPrompt, isInstalled, handleInstall } = usePWAInstall();
+  const { user, loading } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!loading && user) {
+      router.push('/dashboard');
+    }
+  }, [user, loading, router]);
 
   return (
     <div className="flex flex-col font-sans overflow-x-hidden relative selection:bg-blue-500/30">
@@ -17,39 +28,39 @@ export default function HomePage() {
       
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="relative pt-12 pb-20 sm:pt-24 sm:pb-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 items-center">
+        <section className="relative pt-8 pb-16 sm:pt-24 sm:pb-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 sm:gap-12 lg:gap-8 items-center">
             <div className="relative z-10 text-center lg:text-left">
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-500/10 text-blue-500 font-medium text-sm mb-6 border border-blue-500/20">
-                <Sparkles className="w-4 h-4" />
+              <div className="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full bg-blue-500/10 text-blue-500 font-medium text-xs sm:text-sm mb-4 sm:mb-6 border border-blue-500/20">
+                <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                 <span>The ultimate planning tool</span>
               </div>
-              <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold leading-[1.1] mb-6 tracking-tight">
+              <h1 className="text-[2.2rem] leading-[1.15] sm:text-6xl lg:text-7xl font-extrabold mb-4 sm:mb-6 tracking-tight">
                 Manage your time, <br className="hidden lg:block" />
                 <span className="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">
                   beautifully.
                 </span>
               </h1>
-              <p className="text-xl sm:text-2xl text-muted-foreground mb-8 leading-relaxed max-w-2xl mx-auto lg:mx-0 font-light">
+              <p className="text-[15px] sm:text-lg md:text-xl text-muted-foreground mb-6 sm:mb-8 leading-relaxed max-w-xl mx-auto lg:mx-0 font-light">
                 Timely brings all your schedules, tasks, and team collaboration into one vibrant, lightning-fast workspace.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                <Link href="/signup">
-                  <Button size="sm" className="w-full sm:w-auto h-12 px-8 text-lg rounded-full bg-foreground text-background hover:bg-foreground/90 transition-transform hover:-translate-y-1 shadow-xl">
+              <div className="flex flex-row gap-2.5 sm:gap-4 justify-center lg:justify-start w-full max-w-[340px] sm:max-w-none mx-auto lg:mx-0">
+                <Link href="/signup" className="flex-1 sm:flex-none">
+                  <Button size="sm" className="w-full sm:w-auto h-11 sm:h-12 px-0 sm:px-8 text-sm sm:text-lg rounded-full bg-foreground text-background hover:bg-foreground/90 transition-transform hover:-translate-y-1 shadow-xl whitespace-nowrap">
                     Get Started Free
                   </Button>
                 </Link>
                 {!isInstalled && installPrompt && (
-                  <Button onClick={handleInstall} variant="outline" size="sm" className="w-full sm:w-auto h-12 px-8 text-lg rounded-full border-blue-500/30 text-blue-500 hover:bg-blue-500/10 transition-transform hover:-translate-y-1 flex items-center gap-2">
-                    <Download className="w-5 h-5" />
-                    Download App
+                  <Button onClick={handleInstall} variant="outline" size="sm" className="flex-1 sm:flex-none h-11 sm:h-12 px-0 sm:px-8 text-sm sm:text-lg rounded-full border-blue-500/30 text-blue-500 hover:bg-blue-500/10 transition-transform hover:-translate-y-1 flex items-center justify-center gap-1.5 whitespace-nowrap overflow-hidden">
+                    <Download className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" />
+                    <span>Get App</span>
                   </Button>
                 )}
               </div>
-              <div className="mt-8 flex items-center justify-center lg:justify-start gap-4 text-sm text-muted-foreground">
+              <div className="mt-6 sm:mt-8 flex items-center justify-center lg:justify-start gap-3 sm:gap-4 text-xs sm:text-sm text-muted-foreground">
                 <div className="flex -space-x-2">
                   {[...Array(4)].map((_, i) => (
-                    <div key={i} className={`w-8 h-8 rounded-full border-2 border-background flex items-center justify-center text-[10px] font-bold text-white z-${40 - i * 10}`} style={{backgroundColor: `hsl(${220 + i * 20}, 80%, 60%)`}}>
+                    <div key={i} className={`w-6 h-6 sm:w-8 sm:h-8 rounded-full border-[1.5px] sm:border-2 border-background flex items-center justify-center text-[8px] sm:text-[10px] font-bold text-white z-${40 - i * 10}`} style={{backgroundColor: `hsl(${220 + i * 20}, 80%, 60%)`}}>
                       {String.fromCharCode(65 + i)}
                     </div>
                   ))}

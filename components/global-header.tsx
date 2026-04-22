@@ -59,18 +59,11 @@ export function GlobalHeader() {
             </Link>
           ) : (
             <>
-              {pathname !== '/login' && (
-                <Link href="/login" className="hidden sm:block">
-                  <Button variant="ghost" className="font-semibold text-muted-foreground hover:text-foreground">Log in</Button>
+             
+                <Link href="/login" className="">
+                  <Button className="rounded-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold shadow-lg shadow-blue-500/20 border-0 transition-transform hover:-translate-y-0.5 h-9">Log in</Button>
                 </Link>
-              )}
-              {pathname !== '/signup' && (
-                <Link href="/signup">
-                  <Button className="rounded-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold shadow-lg shadow-blue-500/20 border-0 transition-transform hover:-translate-y-0.5 h-9">
-                    Sign Up <ChevronRight className="w-4 h-4 ml-1 hidden sm:block" />
-                  </Button>
-                </Link>
-              )}
+              
             </>
           )
         )}

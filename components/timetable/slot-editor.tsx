@@ -27,7 +27,6 @@ interface SlotEditorProps {
 
 export function SlotEditor({ isOpen, slot, onClose, onSave }: SlotEditorProps) {
   const [title, setTitle] = useState(slot?.title || '');
-  const [description, setDescription] = useState(slot?.description || '');
   const [startTime, setStartTime] = useState(slot?.startTime || '09:00');
   const [endTime, setEndTime] = useState(slot?.endTime || '10:00');
   const [color, setColor] = useState(slot?.color || COLORS[4]);
@@ -36,7 +35,6 @@ export function SlotEditor({ isOpen, slot, onClose, onSave }: SlotEditorProps) {
   useEffect(() => {
     if (isOpen) {
       setTitle(slot?.title || '');
-      setDescription(slot?.description || '');
       setStartTime(slot?.startTime || '09:00');
       setEndTime(slot?.endTime || '10:00');
       setColor(slot?.color || COLORS[4]);
@@ -51,7 +49,6 @@ export function SlotEditor({ isOpen, slot, onClose, onSave }: SlotEditorProps) {
       const newSlot: TimeSlot = {
         id: slot?.id || `slot_${Date.now()}`,
         title: title.trim(),
-        description: description.trim(),
         startTime,
         endTime,
         color,
@@ -65,7 +62,6 @@ export function SlotEditor({ isOpen, slot, onClose, onSave }: SlotEditorProps) {
 
   const handleClose = () => {
     setTitle(slot?.title || '');
-    setDescription(slot?.description || '');
     setStartTime(slot?.startTime || '09:00');
     setEndTime(slot?.endTime || '10:00');
     setColor(slot?.color || COLORS[4]);
@@ -86,16 +82,6 @@ export function SlotEditor({ isOpen, slot, onClose, onSave }: SlotEditorProps) {
               placeholder="e.g., Mathematics Class"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              disabled={saving}
-            />
-          </div>
-
-          <div className="space-y-2">
-            <label className="text-sm font-medium">Description</label>
-            <Input
-              placeholder="Optional notes"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
               disabled={saving}
             />
           </div>

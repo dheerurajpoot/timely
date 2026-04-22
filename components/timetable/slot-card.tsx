@@ -74,7 +74,7 @@ export function SlotCard({ slot, onEdit, onDelete, onToggleComplete, compact = f
             </div>
           </div>
         </div>
-        <div className="flex gap-1 ml-2 flex-shrink-0 z-10 opacity-0 group-hover/card:opacity-100 transition-opacity">
+        <div className="flex gap-1 ml-2 flex-shrink-0 z-10 opacity-100 sm:opacity-0 sm:group-hover/card:opacity-100 transition-opacity">
           <Button
             variant="ghost"
             size="sm"
