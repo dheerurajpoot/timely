@@ -32,15 +32,15 @@ export function SlotCard({ slot, onEdit, onDelete, onToggleComplete, compact = f
   if (compact) {
     return (
       <div
-        className={`p-3 rounded-lg text-white text-sm group hover:shadow-md transition-shadow cursor-pointer ${slot.completed ? 'opacity-50 line-through' : ''}`}
+        className={`p-3.5 rounded-xl text-white text-sm group hover:shadow-lg transition-all cursor-pointer ${slot.completed ? 'opacity-50 line-through' : ''}`}
         style={{ backgroundColor: slot.color }}
         onClick={() => onEdit(slot)}
       >
-        <div className="font-medium truncate flex justify-between items-center gap-2">
-          {slot.title}
-          {tag && <span className="text-[8px] font-bold uppercase opacity-70 tracking-tighter">{tag}</span>}
+        <div className="font-medium whitespace-pre-wrap line-clamp-4 leading-relaxed mb-3 flex flex-col items-start gap-1.5">
+          {tag && <span className="text-[9px] font-bold uppercase opacity-90 tracking-wider bg-black/20 px-1.5 py-0.5 rounded-sm">{tag}</span>}
+          <span>{slot.title}</span>
         </div>
-        <div className="text-xs opacity-80">{slot.startTime} - {slot.endTime}</div>
+        <div className="text-xs font-semibold opacity-90">{slot.startTime} - {slot.endTime}</div>
       </div>
     );
   }
@@ -57,24 +57,24 @@ export function SlotCard({ slot, onEdit, onDelete, onToggleComplete, compact = f
               {slot.completed ? <CheckCircle2 size={18} /> : <Circle size={18} />}
             </button>
           )}
-          <div className={`${slot.completed ? 'line-through text-muted-foreground' : ''} flex-1 min-w-0`}>
-            <div className="flex items-center gap-2 flex-wrap mb-1">
-              <h3 className="font-semibold text-sm truncate" title={slot.title}>{slot.title}</h3>
-              {tag && (
-                <span className="px-1.5 py-0.5 rounded-full bg-muted text-[9px] font-bold uppercase tracking-tighter text-muted-foreground border border-border/30">
+          <div className={`${slot.completed ? 'line-through text-muted-foreground' : ''} flex-1 min-w-0 pt-0.5`}>
+            {tag && (
+              <div className="mb-2">
+                <span className="px-2 py-0.5 rounded-sm bg-muted/80 text-[10px] font-bold uppercase tracking-wide text-muted-foreground border border-border/50">
                   {tag}
                 </span>
-              )}
-            </div>
-            {slot.description && (
-              <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{slot.description}</p>
+              </div>
             )}
-            <div className={`text-xs mt-2 ${slot.completed ? 'text-muted-foreground/80' : 'text-muted-foreground'}`}>
+            <div className="whitespace-pre-wrap text-sm leading-relaxed mb-3 font-medium break-words pr-2">
+              {slot.title}
+            </div>
+            <div className={`text-xs font-medium flex items-center gap-1.5 ${slot.completed ? 'text-muted-foreground/60' : 'text-muted-foreground/80'}`}>
+              <div className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ backgroundColor: slot.color }}></div>
               {slot.startTime} - {slot.endTime}
             </div>
           </div>
         </div>
-        <div className="flex gap-1 ml-2 flex-shrink-0 z-10 opacity-100 sm:opacity-0 sm:group-hover/card:opacity-100 transition-opacity">
+        <div className="flex gap-1 ml-2 flex-shrink-0 z-10 opacity-100 items-start">
           <Button
             variant="ghost"
             size="sm"

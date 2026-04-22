@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { TimeSlot } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { X } from 'lucide-react';
 
@@ -15,7 +16,6 @@ const COLORS = [
   '#0ea5e9', // blue
   '#8b5cf6', // purple
   '#ec4899', // pink
-  '#14b8a6', // teal
 ];
 
 interface SlotEditorProps {
@@ -77,12 +77,13 @@ export function SlotEditor({ isOpen, slot, onClose, onSave }: SlotEditorProps) {
 
         <div className="space-y-4 py-4">
           <div className="space-y-2">
-            <label className="text-sm font-medium">Title *</label>
-            <Input
-              placeholder="e.g., Mathematics Class"
+            <label className="text-sm font-medium">Note / Task</label>
+            <Textarea
+              placeholder="Jot down notes, task details..."
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               disabled={saving}
+              className="resize-none min-h-[120px]"
             />
           </div>
 
